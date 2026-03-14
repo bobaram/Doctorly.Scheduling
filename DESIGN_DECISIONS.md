@@ -15,7 +15,7 @@ I implemented a lightweight **CQRS** pattern by separating "write" operations (C
 - **Clarity:** It prevents "Service Bloat." Instead of a single `AppointmentService` with 20 methods, each use case is encapsulated in its own handler, making the system much easier to navigate and unit test.
 
 ## 3. Technical Choices & Assumptions
-
+- **Notifications (Architectural Placeholder):** To satisfy the requirement for "notification capability," I implemented an `EmailNotificationService` stub. While it currently logs to the console, it demonstrates **Architectural Intent**. By abstracting this behind the `INotificationService` interface and triggering it via Application handlers, the system is "Plug-and-Play" ready for a real SMTP client, iCal generator, or Message Queue without any changes to the core business logic.
 - **Persistence (SQLite):** I deliberately swapped from PostgreSQL to SQLite for this assessment. In a professional setting, I would use a containerized Postgres instance, but for a 4-hour review window, "Zero-Configuration" portability is a senior-level priority to ensure the reviewer can run the code instantly.
 - **Optimistic Concurrency:** To satisfy the requirement for data preservation, I implemented a manual `RowVersion` token logic. This ensures that concurrent updates are detected even in SQLite, which lacks a native auto-generating rowversion type.
 - **Audit Compliance:** Rather than manually logging in every service, I implemented an **EF Core Interceptor**. This is a cross-cutting concern that ensures every change to the database is automatically audited in a consistent format.
