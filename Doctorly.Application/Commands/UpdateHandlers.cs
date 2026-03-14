@@ -58,6 +58,7 @@ public class UpdateAttendeeStatusCommandHandler
 
         calendarEvent.UpdateAttendeeStatus(command.Email, command.IsAttending);
         
+        // Use repository update to ensure the graph is marked as dirty
         await _repository.UpdateAsync(calendarEvent, ct);
         await _repository.SaveChangesAsync(ct);
     }

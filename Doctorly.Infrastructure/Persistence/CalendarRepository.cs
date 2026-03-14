@@ -45,7 +45,12 @@ public class CalendarRepository : ICalendarRepository
 
     public Task UpdateAsync(CalendarEvent calendarEvent, CancellationToken ct = default)
     {
-        _context.CalendarEvents.Update(calendarEvent);
+        _context.Entry(calendarEvent).State = EntityState.Modified;
+        // Also ensure attendees are tracked if they changed
+        foreach (var attendee in calendarEvent.Attendees)
+        {
+            _context.Entry(attendee).State = EntityState.Modified;
+        }
         return Task.CompletedTask;
     }
 
