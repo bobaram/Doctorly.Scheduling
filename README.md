@@ -29,7 +29,14 @@ The project follows a standard 4-layer Clean Architecture:
 - [x] **Concurrency:** Conflict detection middleware.
 - [x] **Audit:** Automatic change logging.
 
+## Prerequisites
+- **.NET 8 SDK** (The application targets `net8.0`)
+- No external database is required (uses SQLite).
+
 ## Setup & Running
+
+### Database Initialization
+The application uses **SQLite** for ease of review. The database file (`doctorly.db`) will be created automatically, and EF Core migrations will be applied on startup.
 
 ### Run the API
 ```bash
