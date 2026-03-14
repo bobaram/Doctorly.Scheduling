@@ -33,8 +33,11 @@ public class AuditInterceptor : SaveChangesInterceptor
         {
             if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.State == EntityState.Deleted)
             {
+                var idProperty = entry.Metadata.FindProperty("Id");
+                var idValue = idProperty != null ? entry.Property("Id").CurrentValue : "N/A (Owned)";
+
                 var auditMessage = $"AUDIT: Entity {entry.Entity.GetType().Name} was {entry.State}. " +
-                                   $"ID: {entry.Property("Id").CurrentValue}";
+                                   $"ID: {idValue}";
                 
                 _logger.LogInformation(auditMessage);
             }
