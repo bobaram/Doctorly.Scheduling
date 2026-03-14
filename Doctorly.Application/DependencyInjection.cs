@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Doctorly.Application.Commands;
+using Doctorly.Application.Queries;
 
 namespace Doctorly.Application;
 
@@ -8,7 +9,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddScoped<CreateEventCommandHandler>();
-        // Add other handlers here as we build them
+        services.AddScoped<GetEventQueryHandler>();
         return services;
     }
 }
