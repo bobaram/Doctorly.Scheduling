@@ -13,17 +13,26 @@ public class EventsController : ControllerBase
     private readonly GetEventQueryHandler _getQueryHandler;
     private readonly GetEventsInRangeQueryHandler _listHandler;
     private readonly FindEventsByKeywordQueryHandler _searchHandler;
+    private readonly UpdateEventCommandHandler _updateHandler;
+    private readonly DeleteEventCommandHandler _deleteHandler;
+    private readonly UpdateAttendeeStatusCommandHandler _statusHandler;
 
     public EventsController(
         CreateEventCommandHandler createHandler, 
         GetEventQueryHandler getQueryHandler,
         GetEventsInRangeQueryHandler listHandler,
-        FindEventsByKeywordQueryHandler searchHandler)
+        FindEventsByKeywordQueryHandler searchHandler,
+        UpdateEventCommandHandler updateHandler,
+        DeleteEventCommandHandler deleteHandler,
+        UpdateAttendeeStatusCommandHandler statusHandler)
     {
         _createHandler = createHandler;
         _getQueryHandler = getQueryHandler;
         _listHandler = listHandler;
         _searchHandler = searchHandler;
+        _updateHandler = updateHandler;
+        _deleteHandler = deleteHandler;
+        _statusHandler = statusHandler;
     }
 
     [HttpPost]
@@ -57,5 +66,30 @@ public class EventsController : ControllerBase
     {
         var result = await _searchHandler.Handle(new FindEventsByKeywordQuery(keyword), ct);
         return Ok(result);
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Update(Guid id, UpdateEventCommand command, CancellationToken ct)
+    {
+        if (id != command.Id) return BadRequest();
+        await _updateHandler.Handle(command, ct);
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+    {
+        await _deleteHandler.Handle(new DeleteEventCommand(id), ct);
+        return NoContent();
+    }
+
+    [HttpPatch("{id}/attendees/{email}/status")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> UpdateStatus(Guid id, string email, [FromQuery] bool isAttending, CancellationToken ct)
+    {
+        await _statusHandler.Handle(new UpdateAttendeeStatusCommand(id, email, isAttending), ct);
+        return NoContent();
     }
 }

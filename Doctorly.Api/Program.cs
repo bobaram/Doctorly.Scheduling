@@ -1,3 +1,4 @@
+using Doctorly.Api.Middleware;
 using Doctorly.Application.Commands;
 using Doctorly.Application.Queries;
 using Doctorly.Domain.Interfaces;
@@ -26,8 +27,13 @@ builder.Services.AddScoped<CreateEventCommandHandler>();
 builder.Services.AddScoped<GetEventQueryHandler>();
 builder.Services.AddScoped<GetEventsInRangeQueryHandler>();
 builder.Services.AddScoped<FindEventsByKeywordQueryHandler>();
+builder.Services.AddScoped<UpdateEventCommandHandler>();
+builder.Services.AddScoped<DeleteEventCommandHandler>();
+builder.Services.AddScoped<UpdateAttendeeStatusCommandHandler>();
 
 var app = builder.Build();
+
+app.UseMiddleware<ConcurrencyExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
