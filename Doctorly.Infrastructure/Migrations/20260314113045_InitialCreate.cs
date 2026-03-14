@@ -20,7 +20,7 @@ namespace Doctorly.Infrastructure.Migrations
                     description = table.Column<string>(type: "TEXT", maxLength: 1000, nullable: true),
                     duration_start = table.Column<DateTime>(type: "TEXT", nullable: false),
                     duration_end = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    row_version = table.Column<byte[]>(type: "BLOB", rowVersion: true, nullable: false),
+                    row_version = table.Column<byte[]>(type: "BLOB", nullable: false),
                     created_at = table.Column<DateTime>(type: "TEXT", nullable: false),
                     updated_at = table.Column<DateTime>(type: "TEXT", nullable: true)
                 },

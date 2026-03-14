@@ -24,7 +24,8 @@ public class FindEventsByKeywordQueryHandler
             e.Description,
             e.Duration.Start,
             e.Duration.End,
-            e.Attendees.Select(a => new AttendeeDto(a.Name, a.Email, a.IsAttending))
+            e.Attendees.Select(a => new AttendeeDto(a.Name, a.Email, a.IsAttending)),
+            e.RowVersion
         ));
     }
 }

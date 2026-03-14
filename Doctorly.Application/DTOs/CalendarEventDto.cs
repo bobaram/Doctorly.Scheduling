@@ -6,4 +6,5 @@ public record CalendarEventDto(
     string? Description,
     DateTime StartTime,
     DateTime EndTime,
-    IEnumerable<AttendeeDto> Attendees);
+    IEnumerable<AttendeeDto> Attendees,
+    byte[] RowVersion);

@@ -80,7 +80,6 @@ namespace Doctorly.Infrastructure.Migrations
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("BLOB")
                         .HasColumnName("row_version");
 

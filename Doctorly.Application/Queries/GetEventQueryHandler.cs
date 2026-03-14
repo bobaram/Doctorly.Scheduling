@@ -26,7 +26,8 @@ public class GetEventQueryHandler
             calendarEvent.Description,
             calendarEvent.Duration.Start,
             calendarEvent.Duration.End,
-            calendarEvent.Attendees.Select(a => new AttendeeDto(a.Name, a.Email, a.IsAttending))
+            calendarEvent.Attendees.Select(a => new AttendeeDto(a.Name, a.Email, a.IsAttending)),
+            calendarEvent.RowVersion
         );
     }
 }
