@@ -33,6 +33,8 @@ builder.Services.AddScoped<UpdateAttendeeStatusCommandHandler>();
 
 var app = builder.Build();
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
 // Apply migrations on startup
 using (var scope = app.Services.CreateScope())
 {
