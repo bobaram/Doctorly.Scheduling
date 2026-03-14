@@ -9,7 +9,12 @@ I chose a **Clean Architecture** approach to demonstrate a clear separation betw
 - **Domain-Driven Design (DDD):** I focused on a "Rich Domain Model." Entities like `CalendarEvent` are not simple data buckets; they encapsulate invariants (e.g., end-time validation via the `TimeRange` Value Object) and manage state transitions via explicit methods (`UpdateAttendeeStatus`).
 - **Decoupling:** By using internal **Domain Events**, I ensured that side effects—like notifications—are decoupled from the primary persistence logic. This follows the Open/Closed Principle, allowing for new side effects to be added without modifying the core creation logic.
 
-## 2. Technical Choices & Assumptions
+## 2. Command Query Responsibility Segregation (CQRS)
+I implemented a lightweight **CQRS** pattern by separating "write" operations (Commands) from "read" operations (Queries).
+- **Why CQRS?** Even in a small assessment, this demonstrates readiness for scale. Read and write workloads often have different performance and locking requirements. By separating them into distinct handlers, we can optimize the read side (e.g., using `AsNoTracking` and specialized DTOs) without risking the integrity of the write side.
+- **Clarity:** It prevents "Service Bloat." Instead of a single `AppointmentService` with 20 methods, each use case is encapsulated in its own handler, making the system much easier to navigate and unit test.
+
+## 3. Technical Choices & Assumptions
 
 - **Persistence (SQLite):** I deliberately swapped from PostgreSQL to SQLite for this assessment. In a professional setting, I would use a containerized Postgres instance, but for a 4-hour review window, "Zero-Configuration" portability is a senior-level priority to ensure the reviewer can run the code instantly.
 - **Optimistic Concurrency:** To satisfy the requirement for data preservation, I implemented a manual `RowVersion` token logic. This ensures that concurrent updates are detected even in SQLite, which lacks a native auto-generating rowversion type.
