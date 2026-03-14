@@ -1,5 +1,9 @@
-using Doctorly.Application;
-using Doctorly.Infrastructure;
+using Doctorly.Application.Commands;
+using Doctorly.Application.Queries;
+using Doctorly.Domain.Interfaces;
+using Doctorly.Infrastructure.Messaging;
+using Doctorly.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +12,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Clean Architecture Layers
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+// Infrastructure Registrations
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString)
+           .UseSnakeCaseNamingConvention());
+
+builder.Services.AddScoped<ICalendarRepository, CalendarRepository>();
+builder.Services.AddScoped<INotificationService, EmailNotificationService>();
+
+// Application Registrations (Handlers)
+builder.Services.AddScoped<CreateEventCommandHandler>();
+builder.Services.AddScoped<GetEventQueryHandler>();
+builder.Services.AddScoped<GetEventsInRangeQueryHandler>();
+builder.Services.AddScoped<FindEventsByKeywordQueryHandler>();
 
 var app = builder.Build();
 
