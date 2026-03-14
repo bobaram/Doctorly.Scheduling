@@ -25,7 +25,7 @@ public class CalendarRepository : ICalendarRepository
             .FirstOrDefaultAsync(x => x.Id == id, ct);
     }
 
-    public async Task<IEnumerable<CalendarEvent>> ListAsync(DateTime from, DateTime to, CancellationToken ct = default)
+    public async Task<IEnumerable<CalendarEvent>> GetScheduledEventsInRangeAsync(DateTime from, DateTime to, CancellationToken ct = default)
     {
         return await _context.CalendarEvents
             .AsNoTracking()
@@ -34,12 +34,12 @@ public class CalendarRepository : ICalendarRepository
             .ToListAsync(ct);
     }
 
-    public async Task<IEnumerable<CalendarEvent>> SearchAsync(string query, CancellationToken ct = default)
+    public async Task<IEnumerable<CalendarEvent>> FindEventsByKeywordAsync(string keyword, CancellationToken ct = default)
     {
         return await _context.CalendarEvents
             .AsNoTracking()
             .Include(x => x.Attendees)
-            .Where(x => x.Title.Contains(query) || (x.Description != null && x.Description.Contains(query)))
+            .Where(x => x.Title.Contains(keyword) || (x.Description != null && x.Description.Contains(keyword)))
             .ToListAsync(ct);
     }
 
