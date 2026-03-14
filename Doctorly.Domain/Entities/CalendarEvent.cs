@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using Doctorly.Domain.Entities;
 using Doctorly.Domain.ValueObjects;
+using Doctorly.Domain.Events;
 
 namespace Doctorly.Domain.Entities;
 
@@ -26,6 +26,8 @@ public class CalendarEvent : BaseEntity
         Title = title;
         Description = description;
         Duration = duration;
+        
+        AddDomainEvent(new CalendarEventCreated(this));
     }
 
     public void AddAttendee(Attendee attendee)
@@ -34,6 +36,16 @@ public class CalendarEvent : BaseEntity
             return;
 
         _attendees.Add(attendee);
+        SetUpdated();
+    }
+
+    public void UpdateAttendeeStatus(string email, bool isAttending)
+    {
+        var attendee = _attendees.FirstOrDefault(a => a.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+        if (attendee == null) return;
+
+        attendee.UpdateStatus(isAttending);
+        AddDomainEvent(new AttendeeStatusChanged(Id, email, isAttending));
         SetUpdated();
     }
 
