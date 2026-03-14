@@ -33,6 +33,13 @@ builder.Services.AddScoped<UpdateAttendeeStatusCommandHandler>();
 
 var app = builder.Build();
 
+// Apply migrations on startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
 app.UseMiddleware<ConcurrencyExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
