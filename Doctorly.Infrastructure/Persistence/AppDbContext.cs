@@ -17,7 +17,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<CalendarEvent>(builder =>
         {
             builder.OwnsOne(x => x.Duration);
-            builder.Property(x => x.RowVersion).IsRowVersion();
+            builder.Property(x => x.RowVersion).IsConcurrencyToken();
         });
 
         base.OnModelCreating(modelBuilder);

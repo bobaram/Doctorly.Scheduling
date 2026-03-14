@@ -17,7 +17,7 @@ public class CalendarEvent : BaseEntity
     private readonly List<Attendee> _attendees = [];
     public IReadOnlyCollection<Attendee> Attendees => _attendees.AsReadOnly();
 
-    public byte[] RowVersion { get; private set; } = []; // For concurrency
+    public byte[] RowVersion { get; private set; } = Guid.NewGuid().ToByteArray();
 
     private CalendarEvent() { } // EF Core
 
@@ -30,12 +30,15 @@ public class CalendarEvent : BaseEntity
         AddDomainEvent(new CalendarEventCreated(this));
     }
 
+    private void UpdateRowVersion() => RowVersion = Guid.NewGuid().ToByteArray();
+
     public void AddAttendee(Attendee attendee)
     {
         if (_attendees.Any(a => a.Email.Equals(attendee.Email, StringComparison.OrdinalIgnoreCase)))
             return;
 
         _attendees.Add(attendee);
+        UpdateRowVersion();
         SetUpdated();
     }
 
@@ -46,6 +49,7 @@ public class CalendarEvent : BaseEntity
 
         attendee.UpdateStatus(isAttending);
         AddDomainEvent(new AttendeeStatusChanged(Id, email, isAttending));
+        UpdateRowVersion();
         SetUpdated();
     }
 
@@ -54,6 +58,7 @@ public class CalendarEvent : BaseEntity
         Title = title;
         Description = description;
         Duration = duration;
+        UpdateRowVersion();
         SetUpdated();
     }
 }
