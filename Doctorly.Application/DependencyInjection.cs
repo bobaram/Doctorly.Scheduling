@@ -10,6 +10,8 @@ public static class DependencyInjection
     {
         services.AddScoped<CreateEventCommandHandler>();
         services.AddScoped<GetEventQueryHandler>();
+        services.AddScoped<GetEventsInRangeQueryHandler>();
+        services.AddScoped<FindEventsByKeywordQueryHandler>();
         return services;
     }
 }
