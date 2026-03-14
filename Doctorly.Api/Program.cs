@@ -16,7 +16,7 @@ builder.Services.AddSwaggerGen();
 // Infrastructure Registrations
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString)
+    options.UseSqlite(connectionString)
            .UseSnakeCaseNamingConvention());
 
 builder.Services.AddScoped<ICalendarRepository, CalendarRepository>();
