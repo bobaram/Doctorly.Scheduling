@@ -1,0 +1,6 @@
+@Doctorly.Api_HostAddress = http://localhost:5249
+
+GET {{Doctorly.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

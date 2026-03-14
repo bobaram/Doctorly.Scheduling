@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Doctorly.Api/Doctorly.Api.csproj" />
+  <Project Path="Doctorly.Application/Doctorly.Application.csproj" />
+  <Project Path="Doctorly.Domain/Doctorly.Domain.csproj" />
+  <Project Path="Doctorly.Infrastructure/Doctorly.Infrastructure.csproj" />
+  <Project Path="Doctorly.Tests/Doctorly.Tests.csproj" />
+</Solution>
