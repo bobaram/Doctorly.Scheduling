@@ -1,6 +1,6 @@
-namespace Doctorly.Application.Events.Commands;
+using Doctorly.Application.DTOs;
 
-public record AttendeeDto(string Name, string Email, bool IsAttending);
+namespace Doctorly.Application.Commands;
 
 public record CreateEventCommand(
     string Title, 
